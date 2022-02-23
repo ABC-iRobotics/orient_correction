@@ -1,0 +1,5 @@
+<launch>  
+  <!-- Start the actual detection server -->
+  <node name="orient_correction_server" pkg="orient_correction" type="OrientCorrectionServer.py" respawn="false" output="screen">
+  </node>
+</launch>
