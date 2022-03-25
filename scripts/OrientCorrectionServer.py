@@ -1,3 +1,10 @@
+#! /usr/bin/env python
+
+## @package orient_correction
+# The ROS node for prediction the orientation of the box
+#
+# Defines a ROS action server for predicting the orientation of the box from an image
+
 import rospy
 import actionlib
 from bark_msgs.msg import OrientCorrectionAction, OrientCorrectionResult
@@ -6,16 +13,35 @@ from cv_bridge import CvBridge
 import numpy as np
 import cv2
 
-
+## CorrectOrient class
+#
+# Defines a ROS action server for predictiong the orientation of the box
 class CorrectOrient:
-
+    '''
+    Class for correcting orientation
+    '''
+    ## Constructor of LaserModul class
+    #
     def __init__(self):
+        ## @var bridge
+        #  CvBridge() object for conversions between numpy arrays and ROS Image message types
         self.bridge = CvBridge()
+
+        ## @var server
+        #  The ROS action server for the OrientCorrectionAction action. The name of the action is "orient_correction"
         self.server = actionlib.SimpleActionServer('orient_correction', OrientCorrectionAction, self.execute, False)
         self.server.start()
 
 
+    ## OrientCorrectionAction callback
+    # This function gets called whenever the ROS action server receives a goal from a client
+    # @param goal bark_msgs/OrientCorrectionGoal type action goal, it contains an image for predicting the orientation of the box (see action definition for further details)
     def execute(self, goal):
+        '''
+        OrientCorrectionAction callback
+
+        goal: bark_msgs/OrientCorrectionGoal, action goal, it contains an image for predicting the orientation of the box (see action definition for further details)
+        '''
         # INPUT: cv2 BGR image
         # OUTPUT: correctionangle in degres, clockwise
         image = self.bridge.imgmsg_to_cv2(goal.image, "bgr8")
